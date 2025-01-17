@@ -1,0 +1,20 @@
+[project]
+name = "bivariate-analysis"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "ipykernel>=6.29.5",
+    "pandas>=2.2.3",
+    "numpy>=1.23.0",
+    "matplotlib>=3.7.0",
+    "seaborn>=0.12.0",
+    "scikit-learn>=1.2.0",
+    "mkdocs",
+    "mkdocs-material", # Material theme plugin
+    "mkdocs-git-committers-plugin", # Git committers plugin (example)
+    "mkdocs-gen-files",
+    "python-markdown-math",
+    "pathlib"
+]
