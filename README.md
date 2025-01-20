@@ -49,8 +49,11 @@ Below is an example of how to use the library for analyzing a dataset:
 
 ```python
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.datasets import load_iris
 from  bivariate_analysis.src.bivariate_functions import categorize_into_deciles_with_stats, plot_data_by_varname
+
 
 # Load the iris dataset
 df = pd.DataFrame(data=load_iris().data, columns=load_iris().feature_names)
@@ -79,14 +82,25 @@ for column in cols_to_evaluate:
         df, column, target_column, n_deciles=10, f_decile_tree=False
     )
     bivariate_statistics = pd.concat([bivariate_statistics, result], ignore_index=True)
+# 1. See the result in a table
+display(bivariate_statistics)
 
-# Generate visualizations
-for var in cols_to_evaluate:
-    visualizations[var] = plot_data_by_varname(bivariate_statistics, var, target_column)
+# Generate visualizations in a grid layout
+n_cols = len(cols_to_evaluate)
+n_rows = (n_cols + 1) // 2
+fig, axes = plt.subplots(2, n_rows, figsize=(15, 10))
+axes = axes.flatten()
 
-# Inspect results
-print("Bivariate analysis completed.")
-print(bivariate_statistics)
+for i, var in enumerate(cols_to_evaluate):
+    plot_data_by_varname(axes[i], bivariate_statistics, var, target_column)
+
+# Hide unused subplots
+for j in range(len(cols_to_evaluate), len(axes)):
+    axes[j].axis("off")
+
+plt.tight_layout()
+# 2. See the result graphically
+plt.show()
 ```
 
 ## Documentation
