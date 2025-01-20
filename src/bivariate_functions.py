@@ -145,7 +145,7 @@ def categorize_into_deciles_with_stats(df, column_name, Y, n_deciles=10, f_decil
     decile_stats.reset_index()    
 
     # Calculate statistics for Y within each group
-    y_stats = df.groupby('X_decile',dropna = False, , observed=False)[Y].agg(['mean', 'std', 'median',
+    y_stats = df.groupby('X_decile',dropna = False, observed=False)[Y].agg(['mean', 'std', 'median',
                                                             lambda x: x.quantile(0.25), lambda x: x.quantile(0.75), 'count'])
     y_stats.columns = [f'{Y}_mean', f'{Y}_std', f'{Y}_median', f'{Y}_25%', f'{Y}_75%', 'n']
     total_sum = y_stats['n'].sum()
