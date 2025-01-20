@@ -31,17 +31,9 @@ If the project uses a pyproject.toml file for managing dependencies, you can ins
 
 ```bash
 # Clone the repository
-git clone https://github.com/jackmat/bivariate_analysis.git
+git clone https://github.com/jackmat/bivariate_analysis.git 
 
-# Navigate to the directory
-cd bivariate_analysis
 
-# Install required dependencies using pip
-pip install .
-```
-Alternatively, use the following command to install directly from the pyproject.toml file:
-```bash
-pip install -e .
 ```
 Ensure you have Python version >=3.10 installed as specified in the pyproject.toml file.
 
@@ -58,7 +50,7 @@ Below is an example of how to use the library for analyzing a dataset:
 ```python
 import pandas as pd
 from sklearn.datasets import load_iris
-from src.bivariate_functions import categorize_into_deciles_with_stats, plot_data_by_varname
+from  bivariate_analysis.src.bivariate_functions import categorize_into_deciles_with_stats, plot_data_by_varname
 
 # Load the iris dataset
 df = pd.DataFrame(data=load_iris().data, columns=load_iris().feature_names)
