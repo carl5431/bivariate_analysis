@@ -180,60 +180,27 @@ def categorize_into_deciles_with_stats(df, column_name, Y, n_deciles=10, f_decil
 
 
 
-def plot_data_by_varname(df, var_name, Y):
-    """
-    Plots Y_mean against x_string for a specified varname in the provided DataFrame
-    and adds a horizontal line at the value of gen_Y_mean.
-
-    Parameters:
-    - df: DataFrame containing the data.
-    - var_name: string, the varname to filter by and plot.
-    - Y: the response variable name (string).
-    """
-    # Filter the DataFrame for the specified varname
-    filtered_df = df[df['varname'] == var_name].copy()  # Use .copy() to avoid SettingWithCopyWarning
-
-    # Check if the filtered DataFrame is empty
+# Updated plot_data_by_varname to work with subplots
+def plot_data_by_varname(ax, df, var_name, Y):
+    filtered_df = df[df['varname'] == var_name].copy()
     if filtered_df.empty:
-        display(HTML(f"<p><strong>No data available for '{var_name}'.</strong></p>"))
         return
 
-    # Check for NaN values and warn
-    if filtered_df[['x_string', f'{Y}_mean']].isna().any().any():
-        display(HTML(f"<p><strong>Warning: NaN values detected in data for '{var_name}'.</strong></p>"))
-
-    # Fill NaN in `x_string` with a placeholder
     filtered_df['x_string'] = filtered_df['x_string'].fillna('Missing')
-
-    # Ensure `x_string` is treated as a string
     filtered_df['x_string'] = filtered_df['x_string'].astype(str)
-
-    # Determine general Y mean
     gen_y_mean = filtered_df[f'gen_{Y}_mean'].iloc[0]
 
-    # Create the plot
-    plt.figure(figsize=(10, 6))
-    ax = sns.lineplot(
+    sns.lineplot(
         data=filtered_df,
         x='x_string',
         y=f'{Y}_mean',
         marker='o',
         linewidth=2.5,
-        label=f'Mean {Y}'
+        ax=ax
     )
-    plt.title(f'Median {Y} by Decile: {var_name}', fontsize=14, fontweight='bold')
-    plt.xlabel(f'{var_name}', fontsize=12)
-    plt.ylabel(f'Median {Y}', fontsize=12)
-    plt.grid(True)
-
-    # Add a horizontal line for gen_Y_mean
-    plt.axhline(y=gen_y_mean, color='red', linestyle='--', linewidth=1.5, 
-                label=f'General {Y} mean: {gen_y_mean:.2f}')
-    plt.legend()
-
-    # Rotate x-axis labels to prevent overlapping
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-
-    # Display the plot
-    plt.show()
+    ax.axhline(y=gen_y_mean, color='red', linestyle='--', linewidth=1.5)
+    ax.set_title(f'Median {Y}: {var_name}', fontsize=10, fontweight='bold')
+    ax.set_xlabel(var_name, fontsize=8)
+    ax.set_ylabel(f'Median {Y}', fontsize=8)
+    ax.grid(True)
+    ax.tick_params(axis='x', rotation=45)
