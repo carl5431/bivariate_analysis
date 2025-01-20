@@ -22,7 +22,12 @@ The **Bivariate Analysis Library** is a Python package designed for analyzing ta
 - Visualization tools for exploring feature statistics and distributions.
 
 ## Installation
+
 To install the library, clone the repository and set up the environment:
+
+### Using pyproject.toml
+
+If the project uses a pyproject.toml file for managing dependencies, you can install the dependencies as follows:
 
 ```bash
 # Clone the repository
@@ -31,7 +36,19 @@ git clone https://github.com/jackmat/bivariate_analysis.git
 # Navigate to the directory
 cd bivariate_analysis
 
-# Install required dependencies
+# Install required dependencies using pip
+pip install .
+```
+Alternatively, use the following command to install directly from the pyproject.toml file:
+```bash
+pip install -e .
+```
+Ensure you have Python version >=3.10 installed as specified in the pyproject.toml file.
+
+
+### Using requirements.txt
+If the dependencies are also listed in a requirements.txt file, you can use:
+```bash
 pip install -r requirements.txt
 ```
 
