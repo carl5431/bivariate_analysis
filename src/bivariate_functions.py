@@ -15,7 +15,7 @@ def numeric_decilecuts(df, column_name, n_deciles=10):
                              n_deciles,
                              labels=range(1, n_deciles + 1),
                              duplicates='drop')
-    
+
     # Only add a 'Missing' category if there are NaN values
     if df[column_name].isna().any():
         df['X_decile'] = df['X_decile'].cat.add_categories(['Missing'])
@@ -129,7 +129,7 @@ def categorize_into_deciles_with_stats(df, column_name, Y, n_deciles=10, f_decil
                 except:
                     df[column_name] =df[column_name].astype(str)
                     decile_stats = categorical_cuts(df, column_name)
-            decile_stats = df.groupby('X_decile')[column_name].agg([
+            decile_stats = df.groupby('X_decile', observed=False)[column_name].agg([
             'min', 
             'max', 
             'median', 
@@ -145,7 +145,7 @@ def categorize_into_deciles_with_stats(df, column_name, Y, n_deciles=10, f_decil
     decile_stats.reset_index()    
 
     # Calculate statistics for Y within each group
-    y_stats = df.groupby('X_decile',dropna = False)[Y].agg(['mean', 'std', 'median', 
+    y_stats = df.groupby('X_decile',dropna = False, , observed=False)[Y].agg(['mean', 'std', 'median',
                                                             lambda x: x.quantile(0.25), lambda x: x.quantile(0.75), 'count'])
     y_stats.columns = [f'{Y}_mean', f'{Y}_std', f'{Y}_median', f'{Y}_25%', f'{Y}_75%', 'n']
     total_sum = y_stats['n'].sum()
