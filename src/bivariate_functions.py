@@ -4,6 +4,8 @@ from sklearn.tree import DecisionTreeRegressor
 import matplotlib.pyplot as plt
 import seaborn as sns
 from IPython.display import display, HTML
+from matplotlib.table import Table
+
 
 
 def jitter(a_series, noise_reduction=1000000):
@@ -180,7 +182,9 @@ def categorize_into_deciles_with_stats(df, column_name, Y, n_deciles=10, f_decil
 
 
 
-# Updated plot_data_by_varname to work with subplots
+
+
+# Updated plot_data_by_varname to work with subplots and add a table
 def plot_data_by_varname(ax, df, var_name, Y):
     filtered_df = df[df['varname'] == var_name].copy()
     if filtered_df.empty:
@@ -196,11 +200,34 @@ def plot_data_by_varname(ax, df, var_name, Y):
         y=f'{Y}_mean',
         marker='o',
         linewidth=2.5,
-        ax=ax
+        ax=ax,
+        color='blue'
     )
-    ax.axhline(y=gen_y_mean, color='red', linestyle='--', linewidth=1.5)
-    ax.set_title(f'Median {Y}: {var_name}', fontsize=10, fontweight='bold')
-    ax.set_xlabel(var_name, fontsize=8)
-    ax.set_ylabel(f'Median {Y}', fontsize=8)
-    ax.grid(True)
+    ax.axhline(y=gen_y_mean, color='red', linestyle='--', linewidth=1.5, label=f'Gen {Y} Mean')
+    ax.set_title(f'Median {Y}: {var_name}', fontsize=12, fontweight='bold')
+    ax.set_xlabel(var_name, fontsize=10)
+    ax.set_ylabel(f'Median {Y}', fontsize=10)
+    ax.grid(True, linestyle='--', alpha=0.7)
     ax.tick_params(axis='x', rotation=45)
+    ax.legend()
+    sns.despine(ax=ax, offset=10, trim=True)
+
+    # Add table below the plot
+    table_data = filtered_df[['x_string', f'{Y}_mean', f'{Y}_std', f'{Y}_median', f'{Y}_25%', f'{Y}_75%', 'n']].values
+    col_labels = ['x_string', f'{Y}_mean', f'{Y}_std', f'{Y}_median', f'{Y}_25%', f'{Y}_75%', 'n']
+    table = Table(ax, bbox=[0, -0.3, 1, 0.2])
+    table.auto_set_font_size(False)
+    table.set_fontsize(8)
+
+    # Add column headers
+    for i, label in enumerate(col_labels):
+        table.add_cell(0, i, width=1.0/len(col_labels), height=0.1, text=label, loc='center', facecolor='lightgrey')
+
+    # Add data rows
+    for row_idx, row in enumerate(table_data):
+        for col_idx, cell_value in enumerate(row):
+            table.add_cell(row_idx+1, col_idx, width=1.0/len(col_labels), height=0.1, text=cell_value, loc='center')
+
+    ax.add_table(table)
+    ax.set_position([0.1, 0.4, 0.8, 0.5])  # Adjust plot position to make space for the table
+
