@@ -6,6 +6,8 @@ dist/
 wheels/
 *.egg-info
 
+#specific documents
+src/bivariate_analysis_example.ipynb
 # Virtual environments
 .venv
 
